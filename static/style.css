@@ -1,0 +1,105 @@
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: #f7f9fa;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+header {
+  background: #2563eb;
+  color: #fff;
+  padding: 2rem 1rem 1rem 1rem;
+  text-align: center;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  box-shadow: 0 4px 16px rgba(45,108,223,0.08);
+  margin-bottom: 2rem;
+}
+
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.glass-card {
+  background: rgba(255,255,255,0.85);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(37,99,235,0.10);
+  margin-bottom: 2rem;
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  backdrop-filter: blur(8px);
+  border: 1.5px solid #e3eafc;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+
+.glass-card:hover {
+  box-shadow: 0 12px 36px rgba(37,99,235,0.18);
+  border: 1.5px solid #2563eb44;
+}
+
+section {
+  margin-bottom: 0;
+}
+h2 {
+  color: #2563eb;
+  font-weight: 700;
+  margin-top: 0;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+input[type="file"], .form-control {
+  display: block;
+  margin: 1.2rem 0 0.7rem 0;
+  font-size: 1rem;
+  border: 1.5px solid #d1d9e6;
+  border-radius: 8px;
+  padding: 0.6rem;
+  background: #f7f9fa;
+  transition: border 0.2s;
+}
+input[type="file"]:focus, .form-control:focus {
+  border: 1.5px solid #2563eb;
+  outline: none;
+}
+button, .btn {
+  background: linear-gradient(90deg, #2563eb 60%, #06b6d4 100%);
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 1.08rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.10);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+button:hover, .btn:hover {
+  background: linear-gradient(90deg, #06b6d4 60%, #2563eb 100%);
+  box-shadow: 0 4px 16px rgba(37,99,235,0.18);
+}
+#targetColumnDropdown {
+  margin-bottom: 1rem;
+}
+#uploadStatus {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #2563eb;
+  font-weight: 500;
+}
+@media (max-width: 700px) {
+  main {
+    padding: 0 0.2rem;
+  }
+  .glass-card {
+    padding: 1.2rem 0.7rem 1rem 0.7rem;
+  }
+} 
