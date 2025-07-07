@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartML Analyzer - Professional ML Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #0f172a;
+      --accent-color: #06b6d4;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --light-bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--light-bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      background: var(--card-bg);
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--border-color);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 70px;
+    }
+
+    .top-nav .container-fluid {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .logo i {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.8rem;
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--light-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-icon:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      width: 280px;
+      height: calc(100vh - 70px);
+      background: var(--card-bg);
+      border-right: 1px solid var(--border-color);
+      padding: 2rem 0;
+      overflow-y: auto;
+      z-index: 999;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 0 1.5rem;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.875rem 1.25rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: linear-gradient(135deg, var(--primary-color)10, var(--primary-color)20);
+      color: var(--primary-color);
+      transform: translateX(4px);
+    }
+
+    .sidebar-menu a.active::before {
+      content: '';
+      position: absolute;
+      left: -1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 24px;
+      background: var(--primary-color);
+      border-radius: 2px;
+    }
+
+    .sidebar-menu i {
+      font-size: 1.125rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 280px;
+      padding: 70px 0 0 0;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+    }
+
+    .content-header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .content-header h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .content-header p {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2rem;
+      transition: all 0.2s ease;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      background: var(--light-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card-header h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .card-header i {
+      color: var(--primary-color);
+      font-size: 1.25rem;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    /* Upload Section */
+    .upload-area {
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 3rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-area:hover {
+      border-color: var(--primary-color);
+      background: var(--primary-color)08;
+    }
+
+    .upload-area.dragover {
+      border-color: var(--primary-color);
+      background: var(--primary-color)15;
+      transform: scale(1.02);
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .upload-area:hover .upload-icon {
+      color: var(--primary-color);
+    }
+
+    .upload-text {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-subtext {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* Buttons */
+    .btn {
+      border-radius: 8px;
+      font-weight: 500;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-success {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    /* Form Controls */
+    .form-control {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      background: var(--card-bg);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px var(--primary-color)20;
+      outline: none;
+    }
+
+    /* Status Messages */
+    .status-message {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .status-success {
+      background: var(--success-color)15;
+      color: var(--success-color);
+      border: 1px solid var(--success-color)30;
+    }
+
+    .status-error {
+      background: var(--danger-color)15;
+      color: var(--danger-color);
+      border: 1px solid var(--danger-color)30;
+    }
+
+    .status-info {
+      background: var(--primary-color)15;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color)30;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .metric-card {
+      background: var(--light-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Loading States */
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border-color);
+      border-top: 2px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Progress Bar */
+    .progress {
+      height: 8px;
+      background: var(--border-color);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gradient-primary);
+      transition: width 0.3s ease;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .content-header h1 {
+        font-size: 1.875rem;
+      }
+
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .upload-area {
+        padding: 2rem 1rem;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --light-bg: #0f172a;
+        --card-bg: #1e293b;
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --border-color: #334155;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    /* Chart containers */
+    .chart-container {
+      position: relative;
+      height: 400px;
+      margin-top: 1.5rem;
+    }
+
+    canvas {
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <div class="container-fluid">
+      <a href="#" class="logo">
+        <i class="fas fa-robot"></i>
+        <span>SmartML</span>
+      </a>
+      <div class="user-actions">
+        <a href="#" class="btn-icon" title="Settings">
+          <i class="fas fa-cog"></i>
+        </a>
+        <a href="#" class="btn-icon" title="Help">
+          <i class="fas fa-question-circle"></i>
+        </a>
+        <a href="#" class="btn-icon" title="Profile">
+          <i class="fas fa-user"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <ul class="sidebar-menu">
+      <li>
+        <a href="#upload-section" class="nav-link active">
+          <i class="fas fa-upload"></i>
+          <span>Upload Dataset</span>
+        </a>
+      </li>
+      <li>
+        <a href="#model-section" class="nav-link">
+          <i class="fas fa-cogs"></i>
+          <span>Model Selection</span>
+        </a>
+      </li>
+      <li>
+        <a href="#metrics-section" class="nav-link">
+          <i class="fas fa-chart-line"></i>
+          <span>Performance Metrics</span>
+        </a>
+      </li>
+      <li>
+        <a href="#viz-section" class="nav-link">
+          <i class="fas fa-chart-bar"></i>
+          <span>Visualizations</span>
+        </a>
+      </li>
+      <li>
+        <a href="#explain-section" class="nav-link">
+          <i class="fas fa-brain"></i>
+          <span>Model Explainability</span>
+        </a>
+      </li>
+      <li>
+        <a href="#test-section" class="nav-link">
+          <i class="fas fa-vial"></i>
+          <span>Test & Predict</span>
+        </a>
+      </li>
+      </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Content Header -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <h1>Machine Learning Analyzer</h1>
+        <p>Upload your dataset and get instant ML insights with professional-grade analysis</p>
+  </div>
+    </div>
+
+    <div class="container-fluid">
+      <!-- Upload Section -->
+      <div class="card fade-in" id="upload-section">
+        <div class="card-header">
+          <i class="fas fa-upload"></i>
+          <h3>Dataset Upload</h3>
+        </div>
+        <div class="card-body">
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="upload-text">
+              Drop your CSV file here or click to browse
+    </div>
+            <div class="upload-subtext">
+              Supports CSV files up to 100MB
+  </div>
+            <label for="modelSelect" class="form-label">Select Model:</label>
+            <select id="modelSelect" class="form-select mb-2">
+              <option value="random_forest">Random Forest</option>
+              <option value="logistic_regression">Logistic Regression</option>
+              <option value="decision_tree">Decision Tree</option>
+              <option value="svm">SVM</option>
+            </select>
+            <input type="file" id="csvFile" accept=".csv" class="form-control mb-2" />
+            <div id="targetColumnDropdown"></div>
+          </div>
+          <div class="mt-3">
+            <button id="uploadBtn" class="btn btn-primary">
+              <i class="fas fa-upload"></i>
+              Upload & Analyze
+            </button>
+            <button class="btn btn-outline ms-2">
+              <i class="fas fa-download"></i>
+              Sample Dataset
+            </button>
+          </div>
+          <div id="uploadStatus"></div>
+        </div>
+      </div>
+
+      <!-- Model Selection Section -->
+      <div class="card fade-in" id="model-section" style="display: none;">
+        <div class="card-header">
+          <i class="fas fa-cogs"></i>
+          <h3>Model Configuration</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label">Algorithm</label>
+              <select class="form-control">
+                <option>Random Forest</option>
+                <option>Gradient Boosting</option>
+                <option>Support Vector Machine</option>
+                <option>Neural Network</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Target Variable</label>
+              <select class="form-control" id="targetVariable">
+                <option>Select target column...</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="btn btn-primary">
+              <i class="fas fa-play"></i>
+              Train Model
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="card fade-in" id="metrics-section" style="display: none;">
+        <div class="card-header">
+          <i class="fas fa-chart-line"></i>
+          <h3>Performance Metrics</h3>
+        </div>
+        <div class="card-body">
+          <div class="metrics-grid" id="metricsGrid">
+            <!-- Metrics will be populated here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Visualizations Section -->
+      <div class="card fade-in" id="viz-section" style="display: none;">
+        <div class="card-header">
+          <i class="fas fa-chart-bar"></i>
+          <h3>Data Visualizations</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Confusion Matrix</h5>
+              <div class="chart-container">
+            <canvas id="confMatrix"></canvas>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h5>ROC Curve</h5>
+              <div class="chart-container">
+            <canvas id="rocCurve"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-12">
+              <h5>Feature Importance</h5>
+              <div class="chart-container">
+            <canvas id="featImportance"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explainability Section -->
+      <div class="card fade-in" id="explain-section" style="display: none;">
+        <div class="card-header">
+          <i class="fas fa-brain"></i>
+          <h3>Model Explainability</h3>
+        </div>
+        <div class="card-body">
+          <div id="explainability">
+            <p class="text-secondary">Model explanations will appear here after training...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test Section -->
+      <div class="card fade-in" id="test-section" style="display: none;">
+        <div class="card-header">
+          <i class="fas fa-vial"></i>
+          <h3>Test New Predictions</h3>
+        </div>
+        <div class="card-body">
+          <form id="testForm">
+            <div class="row">
+              <div class="col-md-6">
+                <label class="form-label">Input Features</label>
+                <textarea class="form-control" rows="4" placeholder="Enter feature values (comma-separated)"></textarea>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Prediction Result</label>
+                <div id="predictionResult" class="form-control" style="height: 100px; background: var(--light-bg);">
+                  <span class="text-secondary">Results will appear here...</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-magic"></i>
+                Make Prediction
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Download Section -->
+      <div class="card fade-in" id="download-section" style="display: none;">
+        <div class="card-header">
+          <i class="fas fa-download"></i>
+          <h3>Export Results</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <button class="btn btn-success w-100">
+                <i class="fas fa-download"></i>
+                Download Model
+              </button>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-success w-100">
+                <i class="fas fa-file-csv"></i>
+                Export Results
+              </button>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-success w-100">
+                <i class="fas fa-file-pdf"></i>
+                Generate Report
+              </button>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html> 
